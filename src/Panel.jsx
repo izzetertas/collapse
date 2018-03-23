@@ -5,9 +5,29 @@ import PanelContent from './PanelContent';
 import Animate from 'rc-animate';
 
 class CollapsePanel extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      flagStatus: this.props.flagStatus
+    };
+  }
+  
   handleItemClick() {
     if (this.props.onItemClick) {
-      this.props.onItemClick();
+      this.props.onItemClick(this.props.id);
+    }
+  }
+
+  handleCheckFlagOnClick(e) {
+    e.stopPropagation();
+    if (this.props.checkFlagOnClick) {
+      this.setState((prevState) => {
+          return {
+            flagStatus: !prevState.flagStatus
+          };
+        },
+        () => this.props.checkFlagOnClick(this.props.id, this.state.flagStatus)
+      ); 
     }
   }
 
@@ -25,7 +45,9 @@ class CollapsePanel extends Component {
       destroyInactivePanel,
       disabled,
       forceRender,
+      showCheckedFlag
     } = this.props;
+    const { flagStatus } = this.state;
     const headerCls = classNames(`${prefixCls}-header`, {
       [headerClass]: headerClass,
     });
@@ -34,6 +56,13 @@ class CollapsePanel extends Component {
       [`${prefixCls}-item-active`]: isActive,
       [`${prefixCls}-item-disabled`]: disabled,
     }, className);
+    const showCheckedFlagCls = classNames(
+      { 
+        [`checkedFlag`]: true,
+        [`checkedFlag-show`]: flagStatus,
+        [`checkedFlag-hidden`]: !flagStatus
+      });
+      console.log('state', flagStatus);
     return (
       <div className={itemCls} style={style} id={id} role="tablist">
         <div
@@ -44,6 +73,12 @@ class CollapsePanel extends Component {
         >
           {showArrow && <i className="arrow" />}
           {header}
+          {this.props.showCheckedFlag &&
+            <i 
+              className={showCheckedFlagCls}
+              onClick={this.handleCheckFlagOnClick.bind(this)}
+            />
+          }
         </div>
         <Animate
           showProp="isActive"
@@ -81,19 +116,25 @@ CollapsePanel.propTypes = {
   ]),
   headerClass: PropTypes.string,
   showArrow: PropTypes.bool,
+  showCheckedFlag: PropTypes.bool,
+  flagStatus: PropTypes.bool,
   isActive: PropTypes.bool,
   onItemClick: PropTypes.func,
+  checkFlagOnClick: PropTypes.func,
   style: PropTypes.object,
   destroyInactivePanel: PropTypes.bool,
   disabled: PropTypes.bool,
-  forceRender: PropTypes.bool,
+  forceRender: PropTypes.bool
 };
 
 CollapsePanel.defaultProps = {
   showArrow: true,
+  showCheckedFlag: false,
+  flagStatus: false,
   isActive: false,
   destroyInactivePanel: false,
   onItemClick() {},
+  checkFlagOnClick() {},
   headerClass: '',
   forceRender: false,
 };

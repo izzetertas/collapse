@@ -40,7 +40,14 @@ class Test extends React.Component {
     for (let i = 0, len = 3; i < len; i++) {
       const key = i + 1;
       items.push(
-        <Panel header={`This is panel header ${key}`} key={key} disabled>
+        <Panel header={`This is panel header ${key}`} 
+          key={key}
+          id={key}
+          showCheckedFlag
+          flagStatus={key % 2 === 0 }
+          checkFlagOnClick={(x,y) => console.log('ok=>', x, y)}
+          onItemClick={(x) => console.log('oki=>', x)}
+        >
           <p>{text.repeat(this.state.time)}</p>
         </Panel>
       );
