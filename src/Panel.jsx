@@ -20,14 +20,13 @@ class CollapsePanel extends Component {
 
   handleCheckFlagOnClick(e) {
     e.stopPropagation();
-    if (this.props.checkFlagOnClick) {
+    if (this.props.headerReadIconOnClick) {
       this.setState((prevState) => {
-          return {
-            flagStatus: !prevState.flagStatus
-          };
-        },
-        () => this.props.checkFlagOnClick(this.props.id, this.state.flagStatus)
-      ); 
+        return {
+          flagStatus: !prevState.flagStatus,
+        };
+      }, () => this.props.headerReadIconOnClick(this.props.id, this.state.flagStatus)
+      );
     }
   }
 
@@ -45,7 +44,7 @@ class CollapsePanel extends Component {
       destroyInactivePanel,
       disabled,
       forceRender,
-      showHeaderReadIcon
+      showHeaderReadIcon,
     } = this.props;
     const { flagStatus } = this.state;
     const headerCls = classNames(`${prefixCls}-header`, {
@@ -57,11 +56,10 @@ class CollapsePanel extends Component {
       [`${prefixCls}-item-disabled`]: disabled,
     }, className);
     const showHeaderReadIconCls = classNames(
-      { 
+      {
         [`headerReadIcon`]: true,
-        [`headerReadIcon-selected`]: flagStatus
+        [`headerReadIcon-selected`]: flagStatus,
       });
-      console.log('state', flagStatus);
     return (
       <div className={itemCls} style={style} id={id} role="tablist">
         <div
@@ -72,8 +70,8 @@ class CollapsePanel extends Component {
         >
           {showArrow && <i className="arrow" />}
           {header}
-          {this.props.showHeaderReadIcon &&
-            <i 
+          {showHeaderReadIcon &&
+            <i
               className={showHeaderReadIconCls}
               onClick={this.handleCheckFlagOnClick.bind(this)}
             />
@@ -119,11 +117,11 @@ CollapsePanel.propTypes = {
   flagStatus: PropTypes.bool,
   isActive: PropTypes.bool,
   onItemClick: PropTypes.func,
-  checkFlagOnClick: PropTypes.func,
+  headerReadIconOnClick: PropTypes.func,
   style: PropTypes.object,
   destroyInactivePanel: PropTypes.bool,
   disabled: PropTypes.bool,
-  forceRender: PropTypes.bool
+  forceRender: PropTypes.bool,
 };
 
 CollapsePanel.defaultProps = {
@@ -133,7 +131,7 @@ CollapsePanel.defaultProps = {
   isActive: false,
   destroyInactivePanel: false,
   onItemClick() {},
-  checkFlagOnClick() {},
+  headerReadIconOnClick() {},
   headerClass: '',
   forceRender: false,
 };
