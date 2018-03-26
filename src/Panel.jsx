@@ -8,10 +8,10 @@ class CollapsePanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      flagStatus: this.props.flagStatus
+      flagStatus: this.props.flagStatus,
     };
   }
-  
+
   handleItemClick() {
     if (this.props.onItemClick) {
       this.props.onItemClick(this.props.id);
@@ -45,7 +45,7 @@ class CollapsePanel extends Component {
       destroyInactivePanel,
       disabled,
       forceRender,
-      showCheckedFlag
+      showHeaderReadIcon
     } = this.props;
     const { flagStatus } = this.state;
     const headerCls = classNames(`${prefixCls}-header`, {
@@ -56,11 +56,10 @@ class CollapsePanel extends Component {
       [`${prefixCls}-item-active`]: isActive,
       [`${prefixCls}-item-disabled`]: disabled,
     }, className);
-    const showCheckedFlagCls = classNames(
+    const showHeaderReadIconCls = classNames(
       { 
-        [`checkedFlag`]: true,
-        [`checkedFlag-show`]: flagStatus,
-        [`checkedFlag-hidden`]: !flagStatus
+        [`headerReadIcon`]: true,
+        [`headerReadIcon-selected`]: flagStatus
       });
       console.log('state', flagStatus);
     return (
@@ -73,9 +72,9 @@ class CollapsePanel extends Component {
         >
           {showArrow && <i className="arrow" />}
           {header}
-          {this.props.showCheckedFlag &&
+          {this.props.showHeaderReadIcon &&
             <i 
-              className={showCheckedFlagCls}
+              className={showHeaderReadIconCls}
               onClick={this.handleCheckFlagOnClick.bind(this)}
             />
           }
@@ -116,7 +115,7 @@ CollapsePanel.propTypes = {
   ]),
   headerClass: PropTypes.string,
   showArrow: PropTypes.bool,
-  showCheckedFlag: PropTypes.bool,
+  showHeaderReadIcon: PropTypes.bool,
   flagStatus: PropTypes.bool,
   isActive: PropTypes.bool,
   onItemClick: PropTypes.func,
@@ -129,7 +128,7 @@ CollapsePanel.propTypes = {
 
 CollapsePanel.defaultProps = {
   showArrow: true,
-  showCheckedFlag: false,
+  showHeaderReadIcon: false,
   flagStatus: false,
   isActive: false,
   destroyInactivePanel: false,

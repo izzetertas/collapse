@@ -1,6 +1,25 @@
 @prefixCls: rc-collapse;
+@prefixCls-flag-selected-color: #ff0000;
+@prefixCls-flag-color: #ded9d9;
 @text-color: #666;
 @borderStyle: 1px solid #d9d9d9;
+
+#headerReadIcon {
+  .inline-svg-code( @code ) {
+    @-svg-code: escape(~'<?xml version="1.0" ?>@{code}');
+    @-inline-svg-code: ~'data:image/svg+xml,@{-svg-code}';
+    @-inline-svg-url: ~"url('@{-inline-svg-code}')";
+  }
+  .inline-img( @height, @width, @color ) {
+    @code : ~'<svg xmlns="http://www.w3.org/2000/svg" fill="@{color}" height="@{height}px" width="@{width}px" viewBox="0 0 512 512"><path d="M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z"/></svg>';
+  .inline-svg-code( @code );
+  }
+  .setIcon(@color){
+    .inline-img(20, 20, @color);
+    background: @-inline-svg-url no-repeat;
+    background-position: center;
+  }
+}
 
 #arrow {
   .common(){
@@ -37,7 +56,7 @@
       border-top: none;
     }
 
-    > .@{prefixCls}-header {
+    > .@{prefixCls}-header {      
       height: 38px;
       line-height: 38px;
       text-indent: 16px;
@@ -51,8 +70,7 @@
         vertical-align: middle;
         margin-right: 8px;
       }
-      .checkedFlag {
-        content: '\20';
+      .headerReadIcon {
         width: 30px;
         height: 30px;
         padding-right: 10px;
@@ -60,17 +78,13 @@
         float: right;
         right: 0;
         cursor: pointer;
-        &-show {
-          border: 1px solid red;
-          &::before{
-            content: "+"
-          }
+        #headerReadIcon > .setIcon(@prefixCls-flag-color);        
+        &-selected {
+          #headerReadIcon > .setIcon(@prefixCls-flag-selected-color);
         }
-        &-hidden {
-          border: 1px solid rgb(83, 235, 37);
-          &::before{
-            content: "-"
-          }
+        &:hover {
+          #headerReadIcon > .setIcon(@prefixCls-flag-selected-color);
+          opacity: 0.6;
         }
       }
     }
